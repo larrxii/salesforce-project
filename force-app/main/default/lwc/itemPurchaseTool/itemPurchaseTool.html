@@ -1,0 +1,44 @@
+<template>
+    <div class="page-container">
+        <lightning-button label="Create Item" onclick="{handleCreateItem}"></lightning-button>
+        <span class="account-info">
+            <lightning-formatted-text value={accountName}></lightning-formatted-text>
+            <lightning-formatted-text value={accountNumber}></lightning-formatted-text>
+            <lightning-formatted-text value={accountIndustry}></lightning-formatted-text>
+        </span>
+        <lightning-button label="Cart" onclick={handleOpenCart}></lightning-button>
+    </div>
+
+    <div class="search">
+        <lightning-input type="search" label="Search" onchange={handleSearch}></lightning-input>
+    </div>
+
+    <div class="main-section">
+        <div class="items">
+            <template for:each={filteredItems} for:item="item">
+                <div key={item.Id} class="item-card">
+                    <p>{item.Name}</p>
+                    <p>{item.Description}</p>
+                    <lightning-button label="Details" onclick={handleViewDetails} data-id={item.Id}></lightning-button>
+                    <lightning-button label="Add" onclick={handleAddToCart} data-id={item.Id}></lightning-button>
+                </div>
+            </template>
+        </div>
+
+        <div class="filters">
+            <h2>FILTERS</h2>
+        </div>
+        <h3>Type</h3>
+        <template for:each={typeOptions} for:item="type">
+            <div key={type}>
+                <lightning-input type="checkbox" label={type} onchange={handleTypeFilter} data-value={type}></lightning-input>
+            </div>
+        </template>
+    </div>
+    <div>
+        <h3>Family</h3>
+        <template for:each={familyOptions} for:item="family">
+            <lightning-input type="checkbox" label={family} onchange={handleFamilyFilter} data-value={family}></lightning-input>
+        </template>
+    </div>
+</template>
