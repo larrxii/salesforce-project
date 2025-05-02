@@ -10,18 +10,48 @@
     </div>
 
     <div class="search">
-        <lightning-input type="search" label="Search" onchange={handleSearch}></lightning-input>
+        <lightning-input type="search" label="Search" value={searchText} onchange={handleSearchChange}></lightning-input>
+
+            <h3>Type:</h3>
+            <lightning-input type="checkbox" label="Type 1" value="Type 1" data-type="type" onchange={handleTypeFilterChange}></lightning-input>
+            <lightning-input type="checkbox" label="Type 2" value="Type 2" data-type="type" onchange={handleTypeFilterChange}></lightning-input>
+            <lightning-input type="checkbox" label="Type 3" value="Type 3" data-type="type" onchange={handleTypeFilterChange}></lightning-input>
+            <lightning-input type="checkbox" label="Type 4" value="Type 4" data-type="type" onchange={handleTypeFilterChange}></lightning-input>
+
+
+            <h3>Family:</h3>
+            <lightning-input type="checkbox" label="Family 1" value="Family 1" data-type="family" onchange={handleFamilyFilterChange}></lightning-input>
+            <lightning-input type="checkbox" label="Family 2" value="Family 2" data-type="family" onchange={handleFamilyFilterChange}></lightning-input>
+            <lightning-input type="checkbox" label="Family 3" value="Family 3" data-type="family" onchange={handleFamilyFilterChange}></lightning-input>
+            <lightning-input type="checkbox" label="Family 4" value="Family 4" data-type="family" onchange={handleFamilyFilterChange}></lightning-input>
+
+
+            <template if:true={items}>
+                <template for:each={items} for:item="item">
+                    <div key={item.Id} class="item-card">
+                        <p>{item.Name} — {item.Price__c}</p>
+                    </div>
+                </template>
+            </template>
     </div>
 
     <div class="main-section">
         <div class="items">
             <template for:each={filteredItems} for:item="item">
-                <div key={item.Id} class="item-card">
-                    <p>{item.Name}</p>
-                    <p>{item.Description}</p>
-                    <lightning-button label="Details" onclick={handleViewDetails} data-id={item.Id}></lightning-button>
-                    <lightning-button label="Add" onclick={handleAddToCart} data-id={item.Id}></lightning-button>
-                </div>
+                <div key={item.Id} class="slds-col slds-size_1-of-3 slds-p-around_small">
+                                <lightning-card title={item.Name} icon-name="standard:product">
+                                    <div class="slds-p-horizontal_small">
+                                        <img src={item.Image__c} alt="Product Image" style="max-height: 150px;" />
+                                        <p>{item.Description__c}</p>
+                                        <p><strong>Цена:</strong> {item.Price__c} $</p>
+                                        <lightning-button label="Добавить в корзину"
+                                            variant="brand"
+                                            data-id={item.Id}
+                                            onclick={handleAddToCart}>
+                                        </lightning-button>
+                                    </div>
+                                </lightning-card>
+                            </div>
             </template>
         </div>
 
