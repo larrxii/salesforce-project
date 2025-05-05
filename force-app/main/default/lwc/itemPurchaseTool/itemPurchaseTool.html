@@ -44,10 +44,16 @@
                                         <img src={item.Image__c} alt="Product Image" style="max-height: 150px;" />
                                         <p>{item.Description__c}</p>
                                         <p><strong>Цена:</strong> {item.Price__c} $</p>
-                                        <lightning-button label="Добавить в корзину"
+                                        <lightning-button label="Add to cart"
                                             variant="brand"
                                             data-id={item.Id}
                                             onclick={handleAddToCart}>
+                                        </lightning-button>
+                                        <lightning-button
+                                            label="Details"
+                                            variant="neutral"
+                                            data-id={item.Id}
+                                            onclick={handleViewDetails}>
                                         </lightning-button>
                                     </div>
                                 </lightning-card>
@@ -71,4 +77,68 @@
             <lightning-input type="checkbox" label={family} onchange={handleFamilyFilter} data-value={family}></lightning-input>
         </template>
     </div>
+
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">{selectedItem.Name}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <img src={selectedItem.Image__c} alt="Item Image" style="max-height: 200px;" />
+                    <p><strong>Description:</strong> {selectedItem.Description__c}</p>
+                    <p><strong>Price:</strong> {selectedItem.Price__c} $</p>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Close" onclick={handleCloseModal}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <template if:true={isCartModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">Cart</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <template if:true={cart.length}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Unit Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={cart} for:item="item">
+                                    <tr key={item.Id}>
+                                        <td>{item.Name}</td>
+                                        <td>{item.Price__c}</td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                        <p><strong>Total Items:</strong> {cart.length}</p>
+                        <p><strong>Total Price:</strong> {totalPrice} $</p>
+                    </template>
+                    <template if:false={cart.length}>
+                        <p>Your cart is empty.</p>
+                    </template>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Close" onclick={handleCloseCart}></lightning-button>
+                    <lightning-button
+                        label="Checkout"
+                        variant="brand"
+                        onclick={handleCheckout}>
+                        </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
 </template>
